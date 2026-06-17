@@ -1,6 +1,8 @@
+import _ from "lodash";
+
 function component() {
   const element = document.createElement('div');
-  element.innerHTML = 'Hello Vite';
+  element.innerHTML = _.join(['hello', 'lodash'], ' ');
   return element;
 }
 document.body.appendChild(component());
