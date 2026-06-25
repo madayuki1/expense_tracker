@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "debug_toolbar",
     "django_browser_reload",
+    "crispy_forms",
+    "crispy_bootstrap5",
     "django_vite",
     "finances",
 ]
@@ -137,3 +139,7 @@ DJANGO_VITE = {
     "dev_mode": True
   }
 }
+
+# Crispy Settings
+CRISPY_ALLOWED_TEMPLATE_PACKS = ["bootstrap5"]
+CRISPY_TEMPLATE_PACK = "bootstrap5"
