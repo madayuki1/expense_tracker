@@ -1,3 +1,5 @@
+{% load django_browser_reload %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,5 +9,13 @@
 </head>
 <body>
     <h1>Transaction</h1>
+    {% for Transaction in object_list %}
+    <tr>
+        <td>{{ Transaction.name }}</td>
+        <td>{{ Transaction.amount }}</td>
+        <br>
+    </tr>
+    {% endfor %}
+    {% django_browser_reload_script %}
 </body>
 </html>

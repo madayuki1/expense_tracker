@@ -1,3 +1,5 @@
+{% load django_browser_reload %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +8,13 @@
     <title>Category List View</title>
 </head>
 <body>
-    <h1>category</h1>
+    <h1>Categories</h1>
+    {% for category in object_list %}
+    <tr>
+        <td>{{ category.name }}</td>
+        <br>
+    </tr>
+    {% endfor %}
+    {% django_browser_reload_script %}
 </body>
 </html>

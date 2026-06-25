@@ -18,7 +18,17 @@ class TransactionListView(ListView):
     model = Transaction
     template_name = "transaction_list.html"
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset # TODO
+        return queryset 
+
 
 class CategoryListView(ListView):
     model = Category
     template_name = "category_list.html"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset # TODO
+        return queryset
