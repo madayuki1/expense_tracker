@@ -3,7 +3,17 @@
     <title>Test</title>
 {% endblock title %}
 {% block content %}
-    <h1 class="text-primary">nani test</h1>
+    <h1>Accounts</h1>
+    <th>Account Name</th>
+    <th>Balances</th>
+    <br>
+    {% for Account in object_list %}
+    <tr>
+        <td>{{ Account.name }}</td>
+        <td>{{ Account.balance }}</td>
+        <br>
+    </tr>
+    {% endfor %}
 {% endblock content %}
 {% comment %} {% load django_browser_reload %}
 
