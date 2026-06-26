@@ -8,12 +8,7 @@ from django.urls import reverse_lazy
 
 
 # Create your views here.
-class BaseFormHelper:
-    def setup_helper(self):
-        self.helper = FormHelper()
-        self.helper.add_input(Submit("submit", "Save"))
-        
-class AccountForm(BaseFormHelper, forms.ModelForm):
+class AccountForm(forms.ModelForm):
     """Form definition for Account."""
 
     class Meta:
@@ -21,10 +16,6 @@ class AccountForm(BaseFormHelper, forms.ModelForm):
 
         model = Account
         fields = "__all__"
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.setup_helper()
 
 
 class AccountListView(ListView):

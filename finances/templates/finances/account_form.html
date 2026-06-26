@@ -1,5 +1,4 @@
 {% load django_browser_reload %}
-{% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +9,7 @@
 <body>
     <form action="" method="post">
         {% csrf_token %}
-        {% crispy form %}
+        {{ form }}
     </form>
     {% django_browser_reload_script %}
 </body>
