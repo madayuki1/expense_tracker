@@ -1,5 +1,11 @@
 {% extends 'finances/base.html' %}
 {% block content %}
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="fw-bold mb-4 display-6">Transactions</h2>
+        <a href="#" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Add Item
+        </a>
+    </div>
     <div
         class="table-responsive"
     >
@@ -8,7 +14,7 @@
         >
             <thead class="table-light">
                 <caption>
-                    List of Accounts
+                    List of Category
                 </caption>
                 <tr>
                     <th>Category Name</th>
@@ -29,7 +35,6 @@
                 {% endfor %}
             </tbody>
             <tfoot>
-                
             </tfoot>
         </table>
     </div>
