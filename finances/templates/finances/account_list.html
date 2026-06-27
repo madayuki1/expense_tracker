@@ -31,7 +31,8 @@
                     <td>{{ account.balance }}</td>
                     <td>
                         <button class="btn btn-warning">Edit</button>
-                        <a href=""> <button class="btn btn-warning">Delete</button>
+                        <a href="{% url 'account_delete' account.id %}">
+                            <button class="btn btn-warning">Delete</button>
                         </a>
                     </td>
                 </tr>
