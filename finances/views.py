@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Account, Transaction, Category
-from django.views.generic import ListView, CreateView, DeleteView
+from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 from django import forms
 from django.urls import reverse_lazy
 
@@ -52,6 +52,13 @@ class AccountCreateView(CreateView):
 class AccountDeleteView(DeleteView):
     model = Account
     success_url = reverse_lazy("account_list")
+
+
+class AccountUpdateView(UpdateView):
+    model = Account
+    template_name = "finances/account_update.html"
+    form_class = AccountForm
+    success_url = reverse_lazy('account_list')
 
 
 class TransactionListView(ListView):
