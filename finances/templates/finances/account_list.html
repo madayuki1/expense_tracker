@@ -2,7 +2,7 @@
 {% block content %}
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h2 class="fw-bold mb-4 display-6">Transactions</h2>
-        <a href="#" class="btn btn-primary">
+        <a href="{% url 'account_create' %}" class="btn btn-primary">
             <i class="bi bi-plus-lg"></i> Add Item
         </a>
     </div>
@@ -31,7 +31,8 @@
                     <td>{{ account.balance }}</td>
                     <td>
                         <button class="btn btn-warning">Edit</button>
-                        <button class="btn btn-warning">Delete</button>
+                        <a href=""> <button class="btn btn-warning">Delete</button>
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}

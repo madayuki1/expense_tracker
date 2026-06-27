@@ -14,6 +14,22 @@ class AccountForm(forms.ModelForm):
 
         model = Account
         fields = "__all__"
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "id": "name-id",
+                    "placeholder": "Account Name"
+                }
+            ),
+            "balance": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "id": "balance-id",
+                    "placeholder": "Account Balance"
+                }
+            ),
+        }
 
 
 class AccountListView(ListView):
@@ -31,7 +47,6 @@ class AccountCreateView(CreateView):
     template_name = "finances/account_form.html"
     form_class = AccountForm
     success_url = reverse_lazy('account_list')
-
 
 
 class TransactionListView(ListView):
