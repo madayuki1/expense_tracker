@@ -43,8 +43,8 @@ class Transaction(models.Model):
 
     # TODO: Define fields here
     name = models.CharField("name", max_length=50, null=True, blank=True)
-    account = models.ForeignKey("finances.Account", verbose_name="Account ID", on_delete=models.CASCADE)
-    category = models.ForeignKey("finances.Category", verbose_name="Category ID", on_delete=models.CASCADE)
+    account = models.ForeignKey("finances.Account", verbose_name="Account ID", on_delete=models.CASCADE, default=1)
+    category = models.ForeignKey("finances.Category", verbose_name="Category ID", on_delete=models.CASCADE, default=1)
     amount = models.DecimalField("Transaction Amount", max_digits=9, decimal_places=2)
     description = models.CharField("Transaction Description", max_length=100)
     created_at = models.DateTimeField("Created At", auto_now=False, auto_now_add=True)

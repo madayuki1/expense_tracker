@@ -56,7 +56,7 @@ class AccountDeleteView(DeleteView):
 
 class AccountUpdateView(UpdateView):
     model = Account
-    template_name = "finances/account_update.html"
+    template_name = "finances/account_form.html"
     form_class = AccountForm
     success_url = reverse_lazy('account_list')
 
@@ -70,6 +70,88 @@ class TransactionListView(ListView):
         queryset = queryset # TODO
         return queryset 
 
+class TransactionForm(forms.ModelForm):
+    """Form definition for Transaction."""
+
+    class Meta:
+        """Meta definition for Transactionform."""
+
+        model = Transaction
+        fields = ("__all__")
+        # account = forms.MultipleChoiceField(
+        #     required=True
+        # )
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "id": "name-id",
+                    "placeholder": "Transaction Name"
+                }
+            ),
+            "account": forms.Select(
+                attrs={
+                    "class": "form-select"
+                }
+            ),
+            "category": forms.Select(
+                attrs={
+                    "class": "form-select"
+                }
+            ),
+            "amount": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "id": "amount-id",
+                    "placeholder": "Transaction Amount"
+                }
+            ),
+            "description": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "id": "description-id",
+                    "placeholder": "Transaction Description"
+                }
+            ),
+        }
+
+class TransactionCreateView(CreateView):
+    model = Transaction
+    template_name = "finances/transaction_form.html"
+    form_class = TransactionForm
+    success_url = reverse_lazy('transaction_list')
+
+
+class TransactionUpdateView(UpdateView):
+    model = Transaction
+    template_name = "finances/transaction_form.html"
+    form_class = TransactionForm
+    success_url = reverse_lazy("transaction_list")
+
+
+class TransactionDeleteView(DeleteView):
+    model = Transaction
+    template_name = "finances/transaction_confirm_delete.html"
+    success_url = reverse_lazy('transaction_list')
+
+class CategoryForm(forms.ModelForm):
+    """Form definition for Category."""
+
+    class Meta:
+        """Meta definition for Categoryform."""
+
+        model = Category
+        fields = "__all__"
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "id": "name-id",
+                    "placeholder": "Category Name"
+                }
+            )
+        }
+
 
 class CategoryListView(ListView):
     model = Category
@@ -79,3 +161,20 @@ class CategoryListView(ListView):
         queryset = super().get_queryset()
         queryset = queryset # TODO
         return queryset
+
+
+class CategoryCreateView(CreateView):
+    model = Category
+    template_name = "finances/category_form.html"
+    form_class = CategoryForm
+    success_url = reverse_lazy('category_list')
+
+class CategoryDeleteView(DeleteView):
+    model = Category
+    success_url = reverse_lazy('category_list')
+
+class CategoryUpdateView(UpdateView):
+    model = Category
+    template_name = "finances/category_form.html"
+    form_class = CategoryForm
+    success_url = reverse_lazy('category_list')
