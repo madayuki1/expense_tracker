@@ -1,11 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Account, Transaction, Category
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 from django import forms
 from django.urls import reverse_lazy
-
-
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 # Create your views here.
+
+class UserCreateView(CreateView):
+    model = User
+    template_name = "register.html"
+    form_class = UserCreationForm
+    success_url = reverse_lazy('transaction_list')
+
 class AccountForm(forms.ModelForm):
     """Form definition for Account."""
 
@@ -31,7 +38,6 @@ class AccountForm(forms.ModelForm):
             ),
         }
 
-
 class AccountListView(ListView):
     model = Account
     template_name = "finances/account_list.html"
@@ -41,24 +47,22 @@ class AccountListView(ListView):
         queryset = queryset # TODO
         return queryset 
 
-
 class AccountCreateView(CreateView):
     model = Account
     template_name = "finances/account_form.html"
     form_class = AccountForm
     success_url = reverse_lazy('account_list')
 
-
 class AccountDeleteView(DeleteView):
     model = Account
     success_url = reverse_lazy("account_list")
-
 
 class AccountUpdateView(UpdateView):
     model = Account
     template_name = "finances/account_form.html"
     form_class = AccountForm
     success_url = reverse_lazy('account_list')
+
 
 
 class TransactionListView(ListView):
@@ -121,18 +125,18 @@ class TransactionCreateView(CreateView):
     form_class = TransactionForm
     success_url = reverse_lazy('transaction_list')
 
-
 class TransactionUpdateView(UpdateView):
     model = Transaction
     template_name = "finances/transaction_form.html"
     form_class = TransactionForm
     success_url = reverse_lazy("transaction_list")
 
-
 class TransactionDeleteView(DeleteView):
     model = Transaction
     template_name = "finances/transaction_confirm_delete.html"
     success_url = reverse_lazy('transaction_list')
+
+
 
 class CategoryForm(forms.ModelForm):
     """Form definition for Category."""
@@ -152,7 +156,6 @@ class CategoryForm(forms.ModelForm):
             )
         }
 
-
 class CategoryListView(ListView):
     model = Category
     template_name = "finances/category_list.html"
@@ -161,7 +164,6 @@ class CategoryListView(ListView):
         queryset = super().get_queryset()
         queryset = queryset # TODO
         return queryset
-
 
 class CategoryCreateView(CreateView):
     model = Category
