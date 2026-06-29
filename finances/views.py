@@ -5,13 +5,16 @@ from django import forms
 from django.urls import reverse_lazy
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+
 # Create your views here.
+
 
 class UserCreateView(CreateView):
     model = User
-    template_name = "register.html"
+    template_name = "registration/register.html"
     form_class = UserCreationForm
-    success_url = reverse_lazy('transaction_list')
+    success_url = reverse_lazy("transaction_list")
+
 
 class AccountForm(forms.ModelForm):
     """Form definition for Account."""
@@ -26,17 +29,18 @@ class AccountForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "id": "name-id",
-                    "placeholder": "Account Name"
+                    "placeholder": "Account Name",
                 }
             ),
             "balance": forms.NumberInput(
                 attrs={
                     "class": "form-control",
                     "id": "balance-id",
-                    "placeholder": "Account Balance"
+                    "placeholder": "Account Balance",
                 }
             ),
         }
+
 
 class AccountListView(ListView):
     model = Account
@@ -44,25 +48,27 @@ class AccountListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset # TODO
-        return queryset 
+        queryset = queryset  # TODO
+        return queryset
+
 
 class AccountCreateView(CreateView):
     model = Account
     template_name = "finances/account_form.html"
     form_class = AccountForm
-    success_url = reverse_lazy('account_list')
+    success_url = reverse_lazy("account_list")
+
 
 class AccountDeleteView(DeleteView):
     model = Account
     success_url = reverse_lazy("account_list")
 
+
 class AccountUpdateView(UpdateView):
     model = Account
     template_name = "finances/account_form.html"
     form_class = AccountForm
-    success_url = reverse_lazy('account_list')
-
+    success_url = reverse_lazy("account_list")
 
 
 class TransactionListView(ListView):
@@ -71,8 +77,9 @@ class TransactionListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset # TODO
-        return queryset 
+        queryset = queryset  # TODO
+        return queryset
+
 
 class TransactionForm(forms.ModelForm):
     """Form definition for Transaction."""
@@ -81,7 +88,7 @@ class TransactionForm(forms.ModelForm):
         """Meta definition for Transactionform."""
 
         model = Transaction
-        fields = ("__all__")
+        fields = "__all__"
         # account = forms.MultipleChoiceField(
         #     required=True
         # )
@@ -90,40 +97,34 @@ class TransactionForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "id": "name-id",
-                    "placeholder": "Transaction Name"
+                    "placeholder": "Transaction Name",
                 }
             ),
-            "account": forms.Select(
-                attrs={
-                    "class": "form-select"
-                }
-            ),
-            "category": forms.Select(
-                attrs={
-                    "class": "form-select"
-                }
-            ),
+            "account": forms.Select(attrs={"class": "form-select"}),
+            "category": forms.Select(attrs={"class": "form-select"}),
             "amount": forms.NumberInput(
                 attrs={
                     "class": "form-control",
                     "id": "amount-id",
-                    "placeholder": "Transaction Amount"
+                    "placeholder": "Transaction Amount",
                 }
             ),
             "description": forms.Textarea(
                 attrs={
                     "class": "form-control",
                     "id": "description-id",
-                    "placeholder": "Transaction Description"
+                    "placeholder": "Transaction Description",
                 }
             ),
         }
+
 
 class TransactionCreateView(CreateView):
     model = Transaction
     template_name = "finances/transaction_form.html"
     form_class = TransactionForm
-    success_url = reverse_lazy('transaction_list')
+    success_url = reverse_lazy("transaction_list")
+
 
 class TransactionUpdateView(UpdateView):
     model = Transaction
@@ -131,11 +132,11 @@ class TransactionUpdateView(UpdateView):
     form_class = TransactionForm
     success_url = reverse_lazy("transaction_list")
 
+
 class TransactionDeleteView(DeleteView):
     model = Transaction
     template_name = "finances/transaction_confirm_delete.html"
-    success_url = reverse_lazy('transaction_list')
-
+    success_url = reverse_lazy("transaction_list")
 
 
 class CategoryForm(forms.ModelForm):
@@ -151,10 +152,11 @@ class CategoryForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "id": "name-id",
-                    "placeholder": "Category Name"
+                    "placeholder": "Category Name",
                 }
             )
         }
+
 
 class CategoryListView(ListView):
     model = Category
@@ -162,21 +164,24 @@ class CategoryListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset # TODO
+        queryset = queryset  # TODO
         return queryset
+
 
 class CategoryCreateView(CreateView):
     model = Category
     template_name = "finances/category_form.html"
     form_class = CategoryForm
-    success_url = reverse_lazy('category_list')
+    success_url = reverse_lazy("category_list")
+
 
 class CategoryDeleteView(DeleteView):
     model = Category
-    success_url = reverse_lazy('category_list')
+    success_url = reverse_lazy("category_list")
+
 
 class CategoryUpdateView(UpdateView):
     model = Category
     template_name = "finances/category_form.html"
     form_class = CategoryForm
-    success_url = reverse_lazy('category_list')
+    success_url = reverse_lazy("category_list")
