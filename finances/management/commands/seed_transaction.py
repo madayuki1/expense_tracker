@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.contrib.auth.models import User
 from finances.models import Category, Account, Transaction
 from faker import Faker
 import random
@@ -7,6 +8,7 @@ class Command(BaseCommand):
     help = "Seed Transaction"
     accounts = list(Account.objects.all())
     categories = list(Category.objects.all())
+    user = 
     fake = Faker()
     
     def handle(self, *args, **options):

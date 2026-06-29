@@ -43,16 +43,10 @@ USERS = [
     }
 ]
 class Command(BaseCommand):
-    help = "Seed default category, account, user"
+    help = "Seed default category, account"
     
     def handle(self, *args, **options):
-        self.user = User.objects.create_user(
-            username = 'madayuki',
-            email = "madayuki@mail.com",
-            first_name = "madayuki",
-            last_name = "hirata",
-            password = "password"
-        )
+        self.user = User.objects.get(username="madayuki")
         self.seed_categories()
         self.seed_account()
 
