@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from finances.models import Category, Account, Transaction
+from django.contrib.auth.models import User
 from decimal import Decimal
 
 CATEGORIES = [
@@ -32,8 +33,17 @@ ACCOUNTS = [
     },
 ]
 
+USERS = [
+    {
+        "name": "Madayuki",
+        "email" : "madayuki@email.com",
+        "first_name" : "madayuki",
+        "last_name" : "hirata",
+        "password" : "password",
+    }
+]
 class Command(BaseCommand):
-    help = "Seed default category"
+    help = "Seed default category, account, user"
     
     def handle(self, *args, **options):
         self.seed_categories()
@@ -56,10 +66,27 @@ class Command(BaseCommand):
         for account in ACCOUNTS:
             _, created = Account.objects.get_or_create(
                 name = account['name'],
-                balance = account['balance']
+                balance = account['balance'],
+                user = account['user'],
             )
             if created :
                 created_count += 1
         self.stdout.write(
             self.style.SUCCESS(f"Succesfully Created {created_count} Accounts")
+        )
+
+    def seed_user(self):
+        created_count = 0
+        for user in USERS:
+            _, created = User.objects.create_user(
+                name = user['name'],
+                email = user['email'],
+                first_name = user['first_name'],
+                last_name = user['last_name'],
+                password = user['password']
+            )
+            if created :
+                created_count += 1
+        self.stdout.write(
+            self.style.SUCCESS(f"Succesfully Created {created_count} Users")
         )

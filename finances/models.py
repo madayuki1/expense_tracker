@@ -7,7 +7,7 @@ class Account(models.Model):
     # TODO: Define fields here
     name = models.CharField("Account Name", max_length=50)
     balance = models.DecimalField("Account Balance", max_digits=10, decimal_places=2)
-    user = models.ForeignKey("User", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField("Created At", auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField("Updated At", auto_now=False, auto_now_add=True)
 
@@ -28,7 +28,7 @@ class Category(models.Model):
 
     # TODO: Define fields here
     name = models.CharField("Category Name", max_length=50)
-    user = models.ForeignKey("User", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField("Created At", auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField("Updated At", auto_now=False, auto_now_add=True)
 
@@ -52,7 +52,7 @@ class Transaction(models.Model):
     account = models.ForeignKey("finances.Account", verbose_name="Account ID", on_delete=models.CASCADE, default=1)
     category = models.ForeignKey("finances.Category", verbose_name="Category ID", on_delete=models.CASCADE, default=1)
     amount = models.DecimalField("Transaction Amount", max_digits=9, decimal_places=2)
-    user = models.ForeignKey("User", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     description = models.CharField("Transaction Description", max_length=100)
     created_at = models.DateTimeField("Created At", auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField("Updated At", auto_now=False, auto_now_add=True)
