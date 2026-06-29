@@ -17,7 +17,7 @@ CATEGORIES = [
 ACCOUNTS = [
     {
         "name": "BCA",
-        "balance": 60000000
+        "balance": 60000000,
     },
     {
         "name": "Cash",
@@ -35,7 +35,7 @@ ACCOUNTS = [
 
 USERS = [
     {
-        "name": "Madayuki",
+        "username": "madayuki",
         "email" : "madayuki@email.com",
         "first_name" : "madayuki",
         "last_name" : "hirata",
@@ -46,6 +46,13 @@ class Command(BaseCommand):
     help = "Seed default category, account, user"
     
     def handle(self, *args, **options):
+        self.user = User.objects.create_user(
+            username = 'madayuki',
+            email = "madayuki@mail.com",
+            first_name = "madayuki",
+            last_name = "hirata",
+            password = "password"
+        )
         self.seed_categories()
         self.seed_account()
 
@@ -53,7 +60,8 @@ class Command(BaseCommand):
         created_count = 0
         for category in CATEGORIES:
             _, created = Category.objects.get_or_create(
-                name = category
+                name = category,
+                user = self.user
             )
             if created :
                 created_count += 1
@@ -67,7 +75,7 @@ class Command(BaseCommand):
             _, created = Account.objects.get_or_create(
                 name = account['name'],
                 balance = account['balance'],
-                user = account['user'],
+                user = self.user,
             )
             if created :
                 created_count += 1
@@ -79,7 +87,7 @@ class Command(BaseCommand):
         created_count = 0
         for user in USERS:
             _, created = User.objects.create_user(
-                name = user['name'],
+                username = user['username'],
                 email = user['email'],
                 first_name = user['first_name'],
                 last_name = user['last_name'],
