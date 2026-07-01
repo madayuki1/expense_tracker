@@ -8,7 +8,6 @@ class Command(BaseCommand):
     help = "Seed Transaction"
     accounts = list(Account.objects.all())
     categories = list(Category.objects.all())
-    user = 
     fake = Faker()
     
     def handle(self, *args, **options):
