@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "django_browser_reload",
     "django_vite",
+    "crispy_forms",
+    "crispy_bootstrap5",
     "finances",
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -137,3 +140,5 @@ DJANGO_VITE = {
     "dev_mode": True
   }
 }
+CRISPY_ALLOWED_TEMPLATE_PACKS="bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

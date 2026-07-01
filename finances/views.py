@@ -3,18 +3,8 @@ from .models import Account, Transaction, Category
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 from django import forms
 from django.urls import reverse_lazy
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 
 # Create your views here.
-
-
-class UserCreateView(CreateView):
-    model = User
-    template_name = "registration/register.html"
-    form_class = UserCreationForm
-    success_url = reverse_lazy("transaction_list")
-
 
 class AccountForm(forms.ModelForm):
     """Form definition for Account."""
