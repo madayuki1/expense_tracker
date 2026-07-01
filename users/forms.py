@@ -28,21 +28,5 @@ class UserRegisterForm(UserCreationForm):
             # 'last_name',
             # 'email',
             'password1',
-            # 'password2'
+            'password2'
         ]
-    
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        
-        self.helper.layout = Layout(
-            'username',
-            # Row(
-            #     Column('first_name'),
-            #     Column('last_name')
-            # ),
-            # 'email',
-            'password1',
-            # 'password2'
-        )
