@@ -47,14 +47,17 @@
                         </ul>
                     </div>
                     <div>
-                        
+                        <a href="{% url 'profile'%}">Profile</a>
                         {% if user.is_authenticated %}
                         <form action="{% url 'logout' %}" method="post">
                             {% csrf_token %}
                             <button type="submit">Logout</button>
                         </form>
                         {% else %}
-                            login
+                            <form action="{% url 'login' %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit">Login</button>
+                            </form>
                         {% endif %}
                             
                     </div>

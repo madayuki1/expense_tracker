@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import UserRegisterForm
 # Create your views here.
@@ -22,3 +23,9 @@ class RegisterView(CreateView):
 
         messages.success(self.request, f"Register Success, Welcome {user.username}") 
         return response
+
+@login_required
+def ProfileView(request):
+    return render(request, 'users/profile.html')
+    # model = User
+    # template_name = "users/profile.html"
