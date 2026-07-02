@@ -16,11 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views
 from debug_toolbar.toolbar import debug_toolbar_urls
+from users import views as user_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('register/', user_views.RegisterView.as_view(), name='register'),
     path("finances/", include('finances.urls')),
-    path("users/", include('users.urls')),
     path("__reload__/", include("django_browser_reload.urls")),
 ] + debug_toolbar_urls()
