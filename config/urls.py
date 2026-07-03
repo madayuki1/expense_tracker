@@ -35,6 +35,6 @@ urlpatterns = [
         auth_views.LoginView.as_view(template_name="users/login.html"),
         name="login",
     ),
-    path("finances/", include("finances.urls")),
+    path("", include("finances.urls")),
     path("__reload__/", include("django_browser_reload.urls")),
 ] + debug_toolbar_urls()
