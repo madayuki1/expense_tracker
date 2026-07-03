@@ -1,0 +1,50 @@
+{% extends "finances/base.html" %}
+{% block content %}
+<a class="nav-link text-muted mb-2" href="{% url 'account_list' %}">Back</a>
+<h2 class=""><strong>Account Detail</strong></h2>
+<form class="d-flex mt-4">
+    <div class="col">
+        <div class="mb-3">
+            <label for="" class="form-label">Name</label>
+            <input
+                type="text"
+                class="form-control"
+                placeholder="{{ object.name }}"
+                aria-describedby="helpId"
+                disabled
+            />
+        </div>
+        <div class="mb-3">
+            <label for="" class="form-label">Balance</label>
+            <input
+                type="number"
+                class="form-control"
+                placeholder="{{ object.balance }}"
+                aria-describedby="helpId"
+                disabled
+            />
+        </div>
+        <div class="mb-3">
+            <label for="" class="form-label">Created at</label>
+            <input
+                type="datetime"
+                class="form-control"
+                placeholder="{{ object.created_at }}"
+                aria-describedby="helpId"
+                disabled
+            />
+        </div>
+        <div class="mb-3">
+            <label for="" class="form-label">Updated at</label>
+            <input
+                type="datetime"
+                class="form-control"
+                placeholder="{{ object.updated_at }}"
+                aria-describedby="helpId"
+                disabled
+            />
+        </div>
+    </div>
+</form>
+
+{% endblock content %}

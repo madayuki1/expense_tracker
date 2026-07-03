@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Account, Transaction, Category
-from django.views.generic import ListView, CreateView, DeleteView, UpdateView
+from django.views.generic import ListView, CreateView, DeleteView, UpdateView, DetailView
 from django import forms
 from django.urls import reverse_lazy
 
@@ -31,7 +31,6 @@ class AccountForm(forms.ModelForm):
             ),
         }
 
-
 class AccountListView(ListView):
     model = Account
     template_name = "finances/account_list.html"
@@ -41,6 +40,10 @@ class AccountListView(ListView):
         queryset = queryset  # TODO
         return queryset
 
+
+class AccountDetailView(DetailView):
+    model = Account
+    template_name = "finances/account_detail.html"
 
 class AccountCreateView(CreateView):
     model = Account
@@ -108,12 +111,16 @@ class TransactionForm(forms.ModelForm):
             ),
         }
 
-
 class TransactionCreateView(CreateView):
     model = Transaction
     template_name = "finances/transaction_form.html"
     form_class = TransactionForm
     success_url = reverse_lazy("transaction_list")
+
+
+class TransactionDetailView(DetailView):
+    model = Transaction
+    template_name = "finances/transaction_detail.html"
 
 
 class TransactionUpdateView(UpdateView):
@@ -147,7 +154,6 @@ class CategoryForm(forms.ModelForm):
             )
         }
 
-
 class CategoryListView(ListView):
     model = Category
     template_name = "finances/category_list.html"
@@ -163,6 +169,11 @@ class CategoryCreateView(CreateView):
     template_name = "finances/category_form.html"
     form_class = CategoryForm
     success_url = reverse_lazy("category_list")
+
+
+class CategoryDetailView(DetailView):
+    model = Category
+    template_name = "finances/category_detail.html"
 
 
 class CategoryDeleteView(DeleteView):

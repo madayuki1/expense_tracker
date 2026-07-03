@@ -21,7 +21,7 @@
                     <th>Account</th>
                     <th>Category</th>
                     <th>Amount</th>
-                    <th>Description</th>
+                    {% comment %} <th>Description</th> {% endcomment %}
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -34,8 +34,10 @@
                     <td scope="row">{{ transaction.account }}</td>
                     <td scope="row">{{ transaction.category }}</td>
                     <td scope="row">{{ transaction.amount }}</td>
-                    <td scope="row">{{ transaction.description }}</td>
+                    {% comment %} <td scope="row">{{ transaction.description }}</td> {% endcomment %}
                     <td>
+                        <a href="{% url 'transaction_detail' transaction.id %}">
+                            <button class="btn btn-warning">Detail</button>
                         <a href="{% url 'transaction_update' transaction.id %}">
                             <button class="btn btn-warning">Edit</button>
                         <a href="{% url 'transaction_delete' transaction.id %}">

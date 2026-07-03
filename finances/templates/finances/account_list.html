@@ -30,6 +30,8 @@
                     <td scope="row">{{ account.name }}</td>
                     <td>{{ account.balance }}</td>
                     <td>
+                        <a href="{% url 'account_detail' account.id %}">
+                            <button class="btn btn-warning">Detail</button>
                         <a href="{% url 'account_update' account.id %}">
                             <button class="btn btn-warning"> Edit </button>
                         <a href="{% url 'account_delete' account.id %}">

@@ -28,6 +28,8 @@
                 >
                     <td scope="row">{{ category.name }}</td>
                     <td>
+                        <a href="{% url 'category_detail' category.id %}">
+                            <button class="btn btn-warning">Detail</button>
                         <a href="{% url 'category_update' category.id %}">
                             <button class="btn btn-warning"> Edit </button>
                         <a href="{% url 'category_delete' category.id %}">
