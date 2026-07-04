@@ -34,6 +34,7 @@ class AccountForm(forms.ModelForm):
 class AccountListView(ListView):
     model = Account
     template_name = "finances/account_list.html"
+    paginate_by = 2
 
     def get_queryset(self):
         queryset = super().get_queryset()
