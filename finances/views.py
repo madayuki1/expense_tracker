@@ -68,6 +68,7 @@ class AccountUpdateView(UpdateView):
 class TransactionListView(ListView):
     model = Transaction
     template_name = "finances/transaction_list.html"
+    paginate_by = 4
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -158,6 +159,7 @@ class CategoryForm(forms.ModelForm):
 class CategoryListView(ListView):
     model = Category
     template_name = "finances/category_list.html"
+    paginate_by = 4
 
     def get_queryset(self):
         queryset = super().get_queryset()
