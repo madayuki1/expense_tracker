@@ -1,2 +1,10 @@
 {% extends "finances/base.html" %}
-<h1>logout</h1>
+
+{% block content %}
+    <h1 class="border-bottom">Logout</h1>
+    <span class="text-muted">
+        Login Again
+        <a href="{% url 'login' %}">Login</a>
+    </span>
+{% endblock content %}
+    

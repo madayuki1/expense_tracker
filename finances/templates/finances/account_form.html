@@ -1,5 +1,6 @@
 {% extends "finances/base.html" %}
 {% block content %}
+{{ request.resolver_match.route }}
 <div class="container">
     <form method="post">
         {% csrf_token %}
