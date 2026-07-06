@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 # Create your models here.
 class Account(models.Model):
     """Model definition for Account."""
@@ -49,8 +50,8 @@ class Transaction(models.Model):
 
     # TODO: Define fields here
     name = models.CharField("name", max_length=50, null=True, blank=True)
-    account = models.ForeignKey("finances.Account", verbose_name="Account ID", on_delete=models.CASCADE, default=1)
-    category = models.ForeignKey("finances.Category", verbose_name="Category ID", on_delete=models.CASCADE, default=1)
+    account = models.ForeignKey("finances.Account", verbose_name="Account ID", on_delete=models.CASCADE, default=1, related_name="accounts")
+    category = models.ForeignKey("finances.Category", verbose_name="Category ID", on_delete=models.CASCADE, default=1, related_name="categories")
     amount = models.DecimalField("Transaction Amount", max_digits=9, decimal_places=2)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField("Transaction Description", max_length=100)

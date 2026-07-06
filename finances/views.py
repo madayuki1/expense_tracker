@@ -79,7 +79,9 @@ class TransactionListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset  # TODO
+        queryset = queryset.filter(
+            user = self.request.user.id
+        )
         return queryset
 
 
@@ -119,12 +121,29 @@ class TransactionForm(forms.ModelForm):
                 }
             ),
         }
+    
+    
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if user is not None:
+            self.fields['account'].queryset = Account.objects.filter(user=user)
+            self.fields['category'].queryset = Category.objects.filter(user=user)
 
 class TransactionCreateView(CreateView):
     model = Transaction
     template_name = "finances/transaction_form.html"
     form_class = TransactionForm
     success_url = reverse_lazy("transaction_list")
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+    
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class TransactionDetailView(DetailView):
@@ -170,7 +189,9 @@ class CategoryListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset  # TODO
+        queryset = queryset.filter(
+            user = self.request.user.id
+        )
         return queryset
 
 
@@ -179,7 +200,15 @@ class CategoryCreateView(CreateView):
     template_name = "finances/category_form.html"
     form_class = CategoryForm
     success_url = reverse_lazy("category_list")
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 class CategoryDetailView(DetailView):
     model = Category
