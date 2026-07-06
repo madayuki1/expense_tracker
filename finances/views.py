@@ -30,6 +30,7 @@ class AccountForm(forms.ModelForm):
                 }
             ),
         }
+    
 
 class AccountListView(ListView):
     model = Account
@@ -53,6 +54,10 @@ class AccountCreateView(CreateView):
     template_name = "finances/account_form.html"
     form_class = AccountForm
     success_url = reverse_lazy("account_list")
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class AccountDeleteView(DeleteView):
