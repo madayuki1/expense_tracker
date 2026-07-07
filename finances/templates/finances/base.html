@@ -1,4 +1,5 @@
 {% load django_browser_reload %}
+{% load navigation %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,13 +37,13 @@
                     <div class="collapse navbar-collapse" id="collapsibleNavId">
                         <ul class="navbar-nav me-auto mt-2 mt-lg-0">
                             <li class="nav-item ">
-                                <a class="nav-link {% if request.resolver_match.route == 'transactions/' %}active{% endif %}" href="{% url 'transaction_list' %}">Transactions</a>
+                                <a class="nav-link {% active_nav request 'transaction' %}" href="{% url 'transaction_list' %}">Transactions</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {% if request.resolver_match.route == 'accounts/' %}active{% endif %}" href="{% url 'account_list' %}">Accounts</a>
+                                <a class="nav-link {% active_nav request 'account' %}" href="{% url 'account_list' %}">Accounts</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {% if request.resolver_match.route == 'categories/' %}active{% endif %}" href="{% url 'category_list' %}">Categories</a>
+                                <a class="nav-link {% active_nav request 'category' %}" href="{% url 'category_list' %}">Categories</a>
                             </li>
                         </ul>
                     </div>
