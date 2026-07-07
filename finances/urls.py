@@ -18,4 +18,5 @@ urlpatterns = [
     path("categories/detail/<int:pk>", views.CategoryDetailView.as_view(), name="category_detail"),
     path("categories/delete/<int:pk>", views.CategoryDeleteView.as_view(), name="category_delete"),
     path("categories/update/<int:pk>", views.CategoryUpdateView.as_view(), name="category_update"),
+    path("dashboard/", views.DashboardView.as_view(), name="dashboard"),
 ]

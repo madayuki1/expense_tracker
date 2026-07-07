@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Account, Transaction, Category
-from django.views.generic import ListView, CreateView, DeleteView, UpdateView, DetailView
+from django.views.generic import ListView, CreateView, DeleteView, UpdateView, DetailView, TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django import forms
 from django.urls import reverse_lazy
 
@@ -32,7 +33,7 @@ class AccountForm(forms.ModelForm):
         }
     
 
-class AccountListView(ListView):
+class AccountListView(LoginRequiredMixin, ListView):
     model = Account
     template_name = "finances/account_list.html"
     paginate_by = 4
@@ -45,11 +46,11 @@ class AccountListView(ListView):
         return queryset
 
 
-class AccountDetailView(DetailView):
+class AccountDetailView(LoginRequiredMixin, DetailView):
     model = Account
     template_name = "finances/account_detail.html"
 
-class AccountCreateView(CreateView):
+class AccountCreateView(LoginRequiredMixin, CreateView):
     model = Account
     template_name = "finances/account_form.html"
     form_class = AccountForm
@@ -60,19 +61,19 @@ class AccountCreateView(CreateView):
         return super().form_valid(form)
 
 
-class AccountDeleteView(DeleteView):
+class AccountDeleteView(LoginRequiredMixin, DeleteView):
     model = Account
     success_url = reverse_lazy("account_list")
 
 
-class AccountUpdateView(UpdateView):
+class AccountUpdateView(LoginRequiredMixin, UpdateView):
     model = Account
     template_name = "finances/account_form.html"
     form_class = AccountForm
     success_url = reverse_lazy("account_list")
 
 
-class TransactionListView(ListView):
+class TransactionListView(LoginRequiredMixin, ListView):
     model = Transaction
     template_name = "finances/transaction_list.html"
     paginate_by = 4
@@ -130,7 +131,7 @@ class TransactionForm(forms.ModelForm):
             self.fields['account'].queryset = Account.objects.filter(user=user)
             self.fields['category'].queryset = Category.objects.filter(user=user)
 
-class TransactionCreateView(CreateView):
+class TransactionCreateView(LoginRequiredMixin, CreateView):
     model = Transaction
     template_name = "finances/transaction_form.html"
     form_class = TransactionForm
@@ -140,24 +141,25 @@ class TransactionCreateView(CreateView):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
 
-class TransactionDetailView(DetailView):
+class TransactionDetailView(LoginRequiredMixin, DetailView):
     model = Transaction
     template_name = "finances/transaction_detail.html"
 
 
-class TransactionUpdateView(UpdateView):
+class TransactionUpdateView(LoginRequiredMixin, UpdateView):
     model = Transaction
     template_name = "finances/transaction_form.html"
     form_class = TransactionForm
     success_url = reverse_lazy("transaction_list")
 
 
-class TransactionDeleteView(DeleteView):
+class TransactionDeleteView(LoginRequiredMixin, DeleteView):
     model = Transaction
     template_name = "finances/transaction_confirm_delete.html"
     success_url = reverse_lazy("transaction_list")
@@ -181,7 +183,7 @@ class CategoryForm(forms.ModelForm):
             )
         }
 
-class CategoryListView(ListView):
+class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
     template_name = "finances/category_list.html"
     paginate_by = 4
@@ -194,7 +196,7 @@ class CategoryListView(ListView):
         return queryset
 
 
-class CategoryCreateView(CreateView):
+class CategoryCreateView(LoginRequiredMixin, CreateView):
     model = Category
     template_name = "finances/category_form.html"
     form_class = CategoryForm
@@ -203,18 +205,34 @@ class CategoryCreateView(CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
-class CategoryDetailView(DetailView):
+class CategoryDetailView(LoginRequiredMixin, DetailView):
     model = Category
     template_name = "finances/category_detail.html"
 
 
-class CategoryDeleteView(DeleteView):
+class CategoryDeleteView(LoginRequiredMixin, DeleteView):
     model = Category
     success_url = reverse_lazy("category_list")
 
 
-class CategoryUpdateView(UpdateView):
+class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     model = Category
     template_name = "finances/category_form.html"
     form_class = CategoryForm
     success_url = reverse_lazy("category_list")
+
+
+class DashboardView(TemplateView):
+    template_name = "finances/dashboard.html"
+    
+    def get_queryset(self):
+        queryset = super(DashboardView, self).get_queryset()
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(DashboardView, self).get_context_data(**kwargs)
+        context['accounts'] = Account.objects.filter(
+            user = self.request.user
+        )
+        return context
+    

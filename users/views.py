@@ -7,8 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import UserRegisterForm
 # Create your views here.
-
-
 class RegisterView(CreateView):
     model = User
     template_name = "users/register.html"
