@@ -3,6 +3,7 @@ from .models import Account, Transaction, Category
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView, DetailView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django import forms
+from django.db.models import Avg, Sum
 from django.urls import reverse_lazy
 
 # Create your views here.
@@ -234,5 +235,12 @@ class DashboardView(TemplateView):
         context['accounts'] = Account.objects.filter(
             user = self.request.user
         )
+        # accounts = Account.objects.aggregate(
+        #     Avg('balance')
+        # )
+        accounts = Account.objects.count()
+        total = accounts
+        context['total'] = total
+
         return context
     
