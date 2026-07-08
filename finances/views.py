@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django import forms
 from django.db.models import Avg, Sum
 from django.urls import reverse_lazy
+from django.utils import timezone
 
 # Create your views here.
 
@@ -232,15 +233,18 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
-        context['accounts'] = Account.objects.filter(
-            user = self.request.user
-        )
-        # accounts = Account.objects.aggregate(
-        #     Avg('balance')
-        # )
-        accounts = Account.objects.count()
-        total = accounts
-        context['total'] = total
+        accounts = Account.objects.filter(user=self.request.user)
+        transactions = Transaction.objects.filter(user=self.request.user)
+        categories = Category.objects.filter(user=self.request.user)
+        
+        monthly_spending = transactions.filter(created_at__month = timezone.now().month).aggregate(Sum("amount"))
 
+        total_balance = accounts.aggregate(
+            Sum('balance')
+        )
+        context['monthly_spending'] = monthly_spending
+        context['categories'] = categories 
+        context['transactions'] = transactions
+        context['accounts'] = accounts
+        context['total_balance'] =total_balance 
         return context
-    
