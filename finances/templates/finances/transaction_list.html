@@ -1,4 +1,5 @@
 {% extends 'finances/base.html' %}
+{% load humanize %}
 {% block content %}
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h2 class="fw-bold mb-4 display-6">Transactions</h2>
@@ -33,7 +34,13 @@
                     <td scope="row">{{ transaction.name }}</td>
                     <td scope="row">{{ transaction.account }}</td>
                     <td scope="row">{{ transaction.category }}</td>
-                    <td scope="row">{{ transaction.amount }}</td>
+                    <td scope="row" 
+                        class="
+                        {% if transaction.type == transaction.TransactionTypes.EXPENSE %}
+                            text-danger
+                        {% elif transaction.type == transaction.TransactionTypes.INCOME %}
+                            text-success
+                        {% endif %}">Rp. {{ transaction.amount|intcomma }}</td>
                     {% comment %} <td scope="row">{{ transaction.description }}</td> {% endcomment %}
                     <td>
                         <a href="{% url 'transaction_detail' transaction.id %}">

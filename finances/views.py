@@ -114,6 +114,7 @@ class TransactionForm(forms.ModelForm):
             ),
             "account": forms.Select(attrs={"class": "form-select"}),
             "category": forms.Select(attrs={"class": "form-select"}),
+            "type": forms.Select(attrs={"class": "form-select"}),
             "amount": forms.NumberInput(
                 attrs={
                     "class": "form-control",
@@ -244,15 +245,21 @@ class DashboardView(TemplateView):
         categories = Category.objects.filter(user=self.request.user)
         category_spending = []
 
-        for category in categories:
-            category_spending.append(
-                {
-                    "category_name": category.name,
-                    "amount": transactions.filter(category__name=category.name).aggregate(
-                        Sum("amount")
-                    )['amount__sum'],
-                }
-            )
+        # for category in categories:
+        #     amount = transactions \
+        #         .filter(category__name=category.name) \
+        #         .aggregate( Sum("amount"))['amount__sum']
+        #     if amount:
+        #         category_spending.append(
+        #             {
+        #                 "category_name": category.name,
+        #                 "amount": amount 
+        #             }
+        #         )
+        total = categories.annotate(
+            total=Sum('transactions__amount')
+        )
+        context['test'] = total
 
         monthly_spending = transactions.filter(
             created_at__month=timezone.now().month

@@ -1,4 +1,5 @@
 {% extends 'finances/base.html' %}
+{% load humanize %}
 {% block content %}
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h2 class="fw-bold mb-4 display-6">Accounts</h2>
@@ -28,7 +29,7 @@
                     class="table-info"
                 >
                     <td scope="row">{{ account.name }}</td>
-                    <td>{{ account.balance }}</td>
+                    <td>Rp. {{ account.balance|intcomma }}</td>
                     <td>
                         <a href="{% url 'account_detail' account.id %}">
                             <button class="btn btn-warning">Detail</button>

@@ -8,6 +8,8 @@ class Command(BaseCommand):
     help = "Seed Transaction"
     accounts = list(Account.objects.all())
     categories = list(Category.objects.all())
+    types = Transaction.TransactionTypes.values
+    users = list(User.objects.filter(is_superuser=False))
     fake = Faker()
     
     def handle(self, *args, **options):
@@ -18,13 +20,17 @@ class Command(BaseCommand):
         for _ in range(20):
             account = random.choice(self.accounts)
             category = random.choice(self.categories)
-            amount = random.randint(10000, 200000)
+            type = random.choice(self.types)
+            amount = random.randrange(10_000, 200_001, 10_000)
+            user = random.choice(self.users)
             description = self.fake.sentence(nb_words=10)
             name = self.fake.sentence(nb_words=3)
 
             Transaction.objects.create(
                 account = account,
                 category = category,
+                type = type,
+                user = user, 
                 amount = amount,
                 description = description,
                 name = name

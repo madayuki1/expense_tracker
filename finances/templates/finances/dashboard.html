@@ -2,6 +2,7 @@
 {% load humanize %}
 
 {% block content %}
+{{ test }}
     <div class="row">
         <div class="col-4">
             <div class="card">
@@ -37,7 +38,7 @@
             {% for category in category_spending %}
                 <li class="list-group-item justify-content-between align-items-center d-flex">
                     <span>{{ category.category_name}}</span>
-                    <span>{{ category.amount }}</span>
+                    <span>Rp. {{ category.amount|intcomma }}</span>
                 </li>
             {% endfor %}
         </ul>

@@ -32,7 +32,6 @@ ACCOUNTS = [
         "balance": 5400000
     },
 ]
-
 USERS = [
     {
         "username": "madayuki1",
@@ -46,33 +45,36 @@ class Command(BaseCommand):
     help = "Seed default category, account"
     
     def handle(self, *args, **options):
-        self.user = User.objects.get(username="madayuki1")
+        # self.user = User.objects.get(username="madayuki1")
+        self.users = User.objects.filter(is_superuser=False)
         self.seed_categories()
         self.seed_account()
 
     def seed_categories(self):
         created_count = 0
-        for category in CATEGORIES:
-            _, created = Category.objects.get_or_create(
-                name = category,
-                user = self.user
-            )
-            if created :
-                created_count += 1
+        for user in self.users: 
+            for category in CATEGORIES:
+                _, created = Category.objects.get_or_create(
+                    name = category,
+                    user = user
+                )
+                if created :
+                    created_count += 1
         self.stdout.write(
             self.style.SUCCESS(f"Succesfully Created {created_count} Categories")
         )
 
     def seed_account(self):
         created_count = 0
-        for account in ACCOUNTS:
-            _, created = Account.objects.get_or_create(
-                name = account['name'],
-                balance = account['balance'],
-                user = self.user,
-            )
-            if created :
-                created_count += 1
+        for user in self.users:
+            for account in ACCOUNTS:
+                _, created = Account.objects.get_or_create(
+                    name = account['name'],
+                    balance = account['balance'],
+                    user = user,
+                )
+                if created :
+                    created_count += 1
         self.stdout.write(
             self.style.SUCCESS(f"Succesfully Created {created_count} Accounts")
         )
