@@ -28,15 +28,18 @@
             </div>
         </div>
     </div>
-    <div class="card">
+    <div class="card mt-3">
         <div class="card-body">
             <h4 class="card-title">Category Spending</h4>
-            <p class="card-text">Text</p>
+            <p class="card-text">Spending based on categories</p>
         </div>
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">Item 1</li>
-            <li class="list-group-item">Item 2</li>
-            <li class="list-group-item">Item 3</li>
+            {% for category in category_spending %}
+                <li class="list-group-item justify-content-between align-items-center d-flex">
+                    <span>{{ category.category_name}}</span>
+                    <span>{{ category.amount }}</span>
+                </li>
+            {% endfor %}
         </ul>
     </div>
     

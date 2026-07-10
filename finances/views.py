@@ -1,6 +1,13 @@
 from django.shortcuts import render, redirect
 from .models import Account, Transaction, Category
-from django.views.generic import ListView, CreateView, DeleteView, UpdateView, DetailView, TemplateView
+from django.views.generic import (
+    ListView,
+    CreateView,
+    DeleteView,
+    UpdateView,
+    DetailView,
+    TemplateView,
+)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django import forms
 from django.db.models import Avg, Sum
@@ -8,6 +15,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 
 # Create your views here.
+
 
 class AccountForm(forms.ModelForm):
     """Form definition for Account."""
@@ -33,7 +41,7 @@ class AccountForm(forms.ModelForm):
                 }
             ),
         }
-    
+
 
 class AccountListView(LoginRequiredMixin, ListView):
     model = Account
@@ -42,15 +50,14 @@ class AccountListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(
-            user = self.request.user.id
-        )
+        queryset = queryset.filter(user=self.request.user.id)
         return queryset
 
 
 class AccountDetailView(LoginRequiredMixin, DetailView):
     model = Account
     template_name = "finances/account_detail.html"
+
 
 class AccountCreateView(LoginRequiredMixin, CreateView):
     model = Account
@@ -82,9 +89,7 @@ class TransactionListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(
-            user = self.request.user.id
-        )
+        queryset = queryset.filter(user=self.request.user.id)
         return queryset
 
 
@@ -124,14 +129,14 @@ class TransactionForm(forms.ModelForm):
                 }
             ),
         }
-    
-    
+
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
 
         if user is not None:
-            self.fields['account'].queryset = Account.objects.filter(user=user)
-            self.fields['category'].queryset = Category.objects.filter(user=user)
+            self.fields["account"].queryset = Account.objects.filter(user=user)
+            self.fields["category"].queryset = Category.objects.filter(user=user)
+
 
 class TransactionCreateView(LoginRequiredMixin, CreateView):
     model = Transaction
@@ -141,7 +146,7 @@ class TransactionCreateView(LoginRequiredMixin, CreateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
+        kwargs["user"] = self.request.user
         return kwargs
 
     def form_valid(self, form):
@@ -185,6 +190,7 @@ class CategoryForm(forms.ModelForm):
             )
         }
 
+
 class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
     template_name = "finances/category_list.html"
@@ -192,9 +198,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(
-            user = self.request.user.id
-        )
+        queryset = queryset.filter(user=self.request.user.id)
         return queryset
 
 
@@ -207,6 +211,8 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
 class CategoryDetailView(LoginRequiredMixin, DetailView):
     model = Category
     template_name = "finances/category_detail.html"
@@ -226,7 +232,7 @@ class CategoryUpdateView(LoginRequiredMixin, UpdateView):
 
 class DashboardView(TemplateView):
     template_name = "finances/dashboard.html"
-    
+
     def get_queryset(self):
         queryset = super(DashboardView, self).get_queryset()
         return queryset
@@ -236,15 +242,28 @@ class DashboardView(TemplateView):
         accounts = Account.objects.filter(user=self.request.user)
         transactions = Transaction.objects.filter(user=self.request.user)
         categories = Category.objects.filter(user=self.request.user)
-        
-        monthly_spending = transactions.filter(created_at__month = timezone.now().month).aggregate(Sum("amount"))
+        category_spending = []
 
-        total_balance = accounts.aggregate(
-            Sum('balance')
-        )
-        context['monthly_spending'] = monthly_spending
-        context['categories'] = categories 
-        context['transactions'] = transactions
-        context['accounts'] = accounts
-        context['total_balance'] =total_balance 
+        for category in categories:
+            category_spending.append(
+                {
+                    "category_name": category.name,
+                    "amount": transactions.filter(category__name=category.name).aggregate(
+                        Sum("amount")
+                    )['amount__sum'],
+                }
+            )
+
+        monthly_spending = transactions.filter(
+            created_at__month=timezone.now().month
+        ).aggregate(Sum("amount"))
+
+        total_balance = accounts.aggregate(Sum("balance"))
+
+        context["category_spending"] = category_spending
+        context["monthly_spending"] = monthly_spending
+        context["categories"] = categories
+        context["transactions"] = transactions
+        context["accounts"] = accounts
+        context["total_balance"] = total_balance
         return context
