@@ -17,7 +17,7 @@ class Command(BaseCommand):
 
     def seed_transactions(self):
         created_count = 0 
-        for _ in range(20):
+        for _ in range(200):
             account = random.choice(self.accounts)
             category = random.choice(self.categories)
             type = random.choice(self.types)

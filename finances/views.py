@@ -260,10 +260,17 @@ class DashboardView(TemplateView):
             .filter(type=Transaction.TransactionTypes.INCOME)\
             .aggregate(income = Sum('amount'))['income']
 
+        expense = transactions\
+            .filter(type=Transaction.TransactionTypes.EXPENSE)\
+            .aggregate(expense = Sum('amount'))['expense']
+        
+        net = income - expense
         total_balance = accounts.aggregate(Sum("balance"))
 
         context["recent_transactions"] = recent_transactions 
-        context["income"] = income 
+        # context["expense"] = expense 
+        # context["income"] = income 
+        context["net"] = net 
         context["category_spending"] = category_spending
         context["monthly_spending"] = monthly_spending
         context["categories"] = categories
