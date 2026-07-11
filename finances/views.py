@@ -268,8 +268,6 @@ class DashboardView(TemplateView):
         total_balance = accounts.aggregate(Sum("balance"))
 
         context["recent_transactions"] = recent_transactions 
-        # context["expense"] = expense 
-        # context["income"] = income 
         context["net"] = net 
         context["category_spending"] = category_spending
         context["monthly_spending"] = monthly_spending
