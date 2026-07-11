@@ -243,30 +243,27 @@ class DashboardView(TemplateView):
         accounts = Account.objects.filter(user=self.request.user)
         transactions = Transaction.objects.filter(user=self.request.user)
         categories = Category.objects.filter(user=self.request.user)
-        category_spending = []
 
-        # for category in categories:
-        #     amount = transactions \
-        #         .filter(category__name=category.name) \
-        #         .aggregate( Sum("amount"))['amount__sum']
-        #     if amount:
-        #         category_spending.append(
-        #             {
-        #                 "category_name": category.name,
-        #                 "amount": amount 
-        #             }
-        #         )
-        total = categories.annotate(
-            total=Sum('transactions__amount')
-        )
-        context['test'] = total
+        recent_transactions = transactions\
+            .order_by('-created_at')[:5]
 
-        monthly_spending = transactions.filter(
-            created_at__month=timezone.now().month
-        ).aggregate(Sum("amount"))
+        category_spending = categories\
+            .annotate( total=Sum('transactions__amount'))\
+            .filter(total__gt=0)\
+            .order_by('-total')[:5]
+
+        monthly_spending = transactions\
+            .filter( created_at__month=timezone.now().month)\
+            .aggregate(Sum("amount"))
+
+        income = transactions\
+            .filter(type=Transaction.TransactionTypes.INCOME)\
+            .aggregate(income = Sum('amount'))['income']
 
         total_balance = accounts.aggregate(Sum("balance"))
 
+        context["recent_transactions"] = recent_transactions 
+        context["income"] = income 
         context["category_spending"] = category_spending
         context["monthly_spending"] = monthly_spending
         context["categories"] = categories
