@@ -22,7 +22,7 @@
                 class="navbar navbar-expand-sm navbar-light bg-light w-100 "
             >
                 <div class="container position-relative">
-                    <a class="navbar-brand" href="{% url 'transaction_list' %}">Finance Tracker</a>
+                    <a class="navbar-brand" href="{% url 'dashboard' %}">Finance Tracker</a>
                     <button
                         class="navbar-toggler d-lg-none"
                         type="button"
@@ -36,6 +36,9 @@
                     </button>
                     <div class="collapse navbar-collapse" id="collapsibleNavId">
                         <ul class="navbar-nav me-auto mt-2 mt-lg-0">
+                            <li class="nav-item ">
+                                <a class="nav-link {% active_nav request 'dashboard' %}" href="{% url 'dashboard' %}">Dashboard</a>
+                            </li>
                             <li class="nav-item ">
                                 <a class="nav-link {% active_nav request 'transaction' %}" href="{% url 'transaction_list' %}">Transactions</a>
                             </li>
@@ -104,7 +107,7 @@
             </div> {% endcomment %}
         </div>
         <nav aria-label="Page navigation">
-        <ul class="pagination" >
+        {% comment %} <ul class="pagination" >
             {% if page_obj.has_previous %}
             <li class="page-item 
                 {% if not page_obj.has_previous %}
@@ -133,7 +136,7 @@
                 </li>
             {% endif %}
                 
-        </ul>
+        </ul> {% endcomment %}
     </nav>
     </main>
     

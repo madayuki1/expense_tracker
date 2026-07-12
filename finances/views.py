@@ -46,7 +46,7 @@ class AccountForm(forms.ModelForm):
 class AccountListView(LoginRequiredMixin, ListView):
     model = Account
     template_name = "finances/account_list.html"
-    paginate_by = 4
+    # paginate_by = 4
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -85,12 +85,40 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
 class TransactionListView(LoginRequiredMixin, ListView):
     model = Transaction
     template_name = "finances/transaction_list.html"
-    paginate_by = 4
+    # paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()
+
+        category = self.request.GET.get('category')
+        account = self.request.GET.get('account')
+
+        if category:
+            queryset = queryset.filter(category=category)
+        
+        if account:
+            queryset = queryset.filter(account=account)
+
         queryset = queryset.filter(user=self.request.user.id)
         return queryset
+    
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        transactions = Transaction.objects.filter(user=self.request.user)
+        categories = Category.objects.filter(user=self.request.user)
+        accounts = Account.objects.filter(user=self.request.user)
+        months = transactions.values(
+            "date__month",
+            "date__year"
+        ).distinct().order_by(
+            '-date__month'
+        )
+
+        context["months"] = months 
+        context["categories"] = categories
+        context["accounts"] =accounts 
+        return context
+    
 
 
 class TransactionForm(forms.ModelForm):
@@ -195,7 +223,7 @@ class CategoryForm(forms.ModelForm):
 class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
     template_name = "finances/category_list.html"
-    paginate_by = 4
+    # paginate_by = 4
 
     def get_queryset(self):
         queryset = super().get_queryset()
