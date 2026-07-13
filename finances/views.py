@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Account, Transaction, Category
+from .models import Account, Transaction, Category, Budget
 from django.views.generic import (
     ListView,
     CreateView,
@@ -16,6 +16,10 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 
 # Create your views here.
+
+class BudgetListView(ListView):
+    model = Budget
+    template_name = "finances/budget_list"
 
 
 class AccountForm(forms.ModelForm):
@@ -278,7 +282,6 @@ class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "finances/category_form.html"
     form_class = CategoryForm
     success_url = reverse_lazy("category_list")
-
 
 class DashboardView(TemplateView):
     template_name = "finances/dashboard.html"

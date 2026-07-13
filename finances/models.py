@@ -103,11 +103,11 @@ class Budget(models.Model):
         verbose_name='Category ID', 
         on_delete=models.CASCADE, 
         default=1,
-        related_name="transactions")
+        related_name="budgets")
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     type = models.CharField(
         max_length=10,
-        choice=BudgetTypes.choices,
+        choices=BudgetTypes.choices,
         default=BudgetTypes.MONTHLY
         )
 
