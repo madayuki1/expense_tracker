@@ -17,10 +17,15 @@ from django.utils import timezone
 
 # Create your views here.
 
+
 class BudgetListView(ListView):
     model = Budget
     template_name = "finances/budget_list"
 
+    def get_queryset(self):
+        queryset = super(BudgetListView, self).get_queryset()
+        queryset = queryset.filter(user=self.request.user)
+        return queryset
 
 class AccountForm(forms.ModelForm):
     """Form definition for Account."""
@@ -46,7 +51,6 @@ class AccountForm(forms.ModelForm):
                 }
             ),
         }
-
 
 class AccountListView(LoginRequiredMixin, ListView):
     model = Account
@@ -95,27 +99,23 @@ class TransactionListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
 
-        category = self.request.GET.get('category')
-        account = self.request.GET.get('account')
-        month = self.request.GET.get('month')
-        year = self.request.GET.get('year')
+        category = self.request.GET.get("category")
+        account = self.request.GET.get("account")
+        month = self.request.GET.get("month")
+        year = self.request.GET.get("year")
 
         if category:
             queryset = queryset.filter(category=category)
-        
+
         if account:
             queryset = queryset.filter(account=account)
-        
+
         if month:
-            queryset = queryset.filter(
-                date__month = month,
-                date__year = year
-            )
-        
+            queryset = queryset.filter(date__month=month, date__year=year)
 
         queryset = queryset.filter(user=self.request.user.id)
         return queryset
-    
+
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         transactions = Transaction.objects.filter(user=self.request.user)
@@ -123,27 +123,30 @@ class TransactionListView(LoginRequiredMixin, ListView):
         accounts = Account.objects.filter(user=self.request.user)
 
         current_date = timezone.now()
-        months = transactions.values(
-            "date__month",
-        ).distinct().order_by(
-            '-date__month'
+        months = (
+            transactions.values(
+                "date__month",
+            )
+            .distinct()
+            .order_by("-date__month")
         )
-        years = transactions.values(
-            "date__year",
-        ).distinct().order_by(
-            '-date__year'
+        years = (
+            transactions.values(
+                "date__year",
+            )
+            .distinct()
+            .order_by("-date__year")
         )
 
         for month in months:
-            month['month_name'] = calendar.month_name[month['date__month']]
+            month["month_name"] = calendar.month_name[month["date__month"]]
 
-        context["current_date"] = current_date 
-        context["years"] = years 
-        context["months"] = months 
+        context["current_date"] = current_date
+        context["years"] = years
+        context["months"] = months
         context["categories"] = categories
-        context["accounts"] =accounts 
+        context["accounts"] = accounts
         return context
-    
 
 
 class TransactionForm(forms.ModelForm):
@@ -283,6 +286,7 @@ class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     form_class = CategoryForm
     success_url = reverse_lazy("category_list")
 
+
 class DashboardView(TemplateView):
     template_name = "finances/dashboard.html"
 
@@ -296,31 +300,31 @@ class DashboardView(TemplateView):
         transactions = Transaction.objects.filter(user=self.request.user)
         categories = Category.objects.filter(user=self.request.user)
 
-        recent_transactions = transactions\
-            .order_by('-created_at')[:5]
+        recent_transactions = transactions.order_by("-created_at")[:5]
 
-        category_spending = categories\
-            .annotate( total=Sum('transactions__amount'))\
-            .filter(total__gt=0)\
-            .order_by('-total')[:5]
+        category_spending = (
+            categories.annotate(total=Sum("transactions__amount"))
+            .filter(total__gt=0)
+            .order_by("-total")[:5]
+        )
 
-        monthly_spending = transactions\
-            .filter( created_at__month=timezone.now().month)\
-            .aggregate(Sum("amount"))
+        monthly_spending = transactions.filter(
+            created_at__month=timezone.now().month
+        ).aggregate(Sum("amount"))
 
-        income = transactions\
-            .filter(type=Transaction.TransactionTypes.INCOME)\
-            .aggregate(income = Sum('amount'))['income']
+        income = transactions.filter(
+            type=Transaction.TransactionTypes.INCOME
+        ).aggregate(income=Sum("amount"))["income"]
 
-        expense = transactions\
-            .filter(type=Transaction.TransactionTypes.EXPENSE)\
-            .aggregate(expense = Sum('amount'))['expense']
-        
+        expense = transactions.filter(
+            type=Transaction.TransactionTypes.EXPENSE
+        ).aggregate(expense=Sum("amount"))["expense"]
+
         net = income - expense
         total_balance = accounts.aggregate(Sum("balance"))
 
-        context["recent_transactions"] = recent_transactions 
-        context["net"] = net 
+        context["recent_transactions"] = recent_transactions
+        context["net"] = net
         context["category_spending"] = category_spending
         context["monthly_spending"] = monthly_spending
         context["categories"] = categories

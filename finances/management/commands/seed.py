@@ -3,6 +3,7 @@ from finances.seeders.accounts import SeedAccounts
 from finances.seeders.categories import SeedCategories
 from finances.seeders.users import SeedUsers
 from finances.seeders.transactions import SeedTransactions
+from finances.seeders.budgets import SeedBudgets
 
 class Command(BaseCommand):
     help = "Seed default category, account"
@@ -12,6 +13,7 @@ class Command(BaseCommand):
         accounts_created = SeedAccounts()
         categories_created = SeedCategories()
         transactions_created = SeedTransactions()
+        budgets_created = SeedBudgets()
 
         self.stdout.write(
             self.style.SUCCESS(f"Succesfully created {users_created} Users")
@@ -24,4 +26,7 @@ class Command(BaseCommand):
         )
         self.stdout.write(
             self.style.SUCCESS(f"Succesfully created {transactions_created} Transactions")
+        )
+        self.stdout.write(
+            self.style.SUCCESS(f"Succesfully created {budgets_created} Budgets")
         )

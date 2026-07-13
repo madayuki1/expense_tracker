@@ -10,7 +10,20 @@ def SeedBudgets():
     types = Budget.BudgetTypes.values
 
     for user in users:
+        categories = Category.objects.filter(user=user)
         for _ in range(4):
             name = fake.word()
             limit = random.randrange(500_000, 3_000_000, 500_000)
+            category = random.choice(categories)
             type = random.choice(types)
+
+            Budget.objects.create(
+                name = name,
+                limit = limit,
+                category = category,
+                user = user,
+                type = type
+            )
+            created_count += 1
+
+    return created_count

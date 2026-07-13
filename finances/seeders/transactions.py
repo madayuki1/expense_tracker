@@ -24,7 +24,6 @@ def SeedTransactions():
             type = random.choice(types)
             amount = random.randrange(10_000, 200_001, 10_000)
             date = start_date + timedelta(days=random.randint(0,60))
-            user = random.choice(users)
             description = fake.sentence(nb_words=10)
             name = fake.sentence(nb_words=3)
 

@@ -119,4 +119,4 @@ class Budget(models.Model):
 
     def __str__(self):
         """Unicode representation of Budget."""
-        pass
+        return self.name
