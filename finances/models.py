@@ -25,7 +25,6 @@ class Account(models.Model):
         """Unicode representation of Account."""
         return self.name
 
-
 class Category(models.Model):
     """Model definition for Category."""
 
@@ -44,7 +43,6 @@ class Category(models.Model):
     def __str__(self):
         """Unicode representation of Category."""
         return self.name
-
 
 class Transaction(models.Model):
     class Meta:
@@ -89,3 +87,36 @@ class Transaction(models.Model):
     def __str__(self):
         """Unicode representation of Transaction."""
         return self.name
+
+class Budget(models.Model):
+    """Model definition for Budget."""
+    class BudgetTypes(models.TextChoices):
+        WEEKLY = "weekly", "Weekly"
+        MONTHLY = "monthly", "Monthly"
+        YEARLY = "yearly", "Monthly"
+
+    # TODO: Define fields here
+    name = models.CharField("Budget Name", max_length=50)
+    limit = models.DecimalField("Budget Limit", max_digits=9, decimal_places=2)
+    category = models.ForeignKey(
+        "finances.Category", 
+        verbose_name='Category ID', 
+        on_delete=models.CASCADE, 
+        default=1,
+        related_name="transactions")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    type = models.CharField(
+        max_length=10,
+        choice=BudgetTypes.choices,
+        default=BudgetTypes.MONTHLY
+        )
+
+    class Meta:
+        """Meta definition for Budget."""
+
+        verbose_name = 'Budget'
+        verbose_name_plural = 'Budgets'
+
+    def __str__(self):
+        """Unicode representation of Budget."""
+        pass

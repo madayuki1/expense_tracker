@@ -1,7 +1,7 @@
 {% extends 'finances/base.html' %}
 {% load humanize %}
 {% block content %}
-    {{ months }}
+{{ request.GET.account}}
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h2 class="fw-bold mb-4 display-6">Transactions</h2>
         <a href="{% url 'transaction_create' %}" class="btn btn-primary">
@@ -12,17 +12,23 @@
         <div class="col-4">
             <div class="border border-3 rounded border-dark">
                 <div class="container mt-3">
-                    <form>
+                    <form method="GET">
                         <div class="mb-3">
                             <label for="" class="form-label">Category</label>
                             <select
                                 class="form-select form-select-lg"
-                                name=""
+                                name="category"
                                 id=""
+                                onchange="this.form.submit()"
                             >
-                                <option selected>Select one</option>
+                                <option value="">All</option>
                                 {% for category in categories %}
-                                    <option value="{{ category.name }}">{{category.name}}</option>
+                                    <option 
+                                        value="{{ category.id }}"
+                                        {% if request.GET.category == category.id|stringformat:"s" %}
+                                            selected
+                                        {% endif %}
+                                        >{{category.name}}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -30,12 +36,18 @@
                             <label for="" class="form-label">Accounts</label>
                             <select
                                 class="form-select form-select-lg"
-                                name=""
+                                name="account"
                                 id=""
+                                onchange="this.form.submit()"
                             >
-                                <option selected>Select one</option>
+                                <option value="">All</option>
                                 {% for account in accounts %}
-                                    <option value="{{ account.name }}">{{account.name}}</option>
+                                    <option 
+                                        value="{{ account.id }}"
+                                        {% if request.GET.account == account.id|stringformat:"s" %}
+                                            selected
+                                        {% endif %}
+                                    >{{account.name}}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -45,13 +57,17 @@
                                     <label for="" class="form-label">Month</label>
                                     <select
                                         class="form-select form-select-lg"
-                                        name=""
+                                        name="month"
                                         id=""
+                                        onchange="this.form.submit()"
                                     >
-                                        <option selected>Select one</option>
-                                        <option value="">New Delhi</option>
-                                        <option value="">Istanbul</option>
-                                        <option value="">Jakarta</option>
+                                        <option value="">All</option>
+                                        {% for month in months %}
+                                            <option 
+                                                value="{{ month.date__month }}"
+                                                {% if current_date.month == month.date__month %}selected{% endif %}
+                                            >{{month.month_name}}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
@@ -60,22 +76,27 @@
                                     <label for="" class="form-label">Year</label>
                                     <select
                                         class="form-select form-select-lg"
-                                        name=""
+                                        name="year"
                                         id=""
+                                        onchange="this.form.submit()"
                                     >
-                                        <option selected>Select one</option>
-                                        <option value="">New Delhi</option>
-                                        <option value="">Istanbul</option>
-                                        <option value="">Jakarta</option>
+                                        {% for year in years %}
+                                            <option value="{{ year.date__year }}"
+                                            {% if current_date.year == year %}selected{% endif %}
+                                        >{{year.date__year}}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                                 
                             </div>
                         </div>
                         <div class="mb-3 row">
-                            <div class="offset-sm-4 col-sm-8">
+                            <div class="col-sm-4">
+                                <a href="{% url 'transaction_list' %}" class="text-decoration-none text-muted">Reset</a>
+                            </div>
+                            <div class="offset-sm-4 col-sm-4">
                                 <button type="submit" class="btn btn-primary">
-                                    Action
+                                    Filter
                                 </button>
                             </div>
                         </div>
@@ -91,9 +112,6 @@
                 class="table table-striped table-hover table-borderless table-primary align-middle"
             >
                 <thead class="table-light">
-                    <caption>
-                        List of Transaction
-                    </caption>
                     <tr>
                         <th>Transaction Name</th>
                         <th>Account</th>

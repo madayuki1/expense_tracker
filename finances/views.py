@@ -10,6 +10,7 @@ from django.views.generic import (
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django import forms
+import calendar
 from django.db.models import Avg, Sum
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -92,12 +93,21 @@ class TransactionListView(LoginRequiredMixin, ListView):
 
         category = self.request.GET.get('category')
         account = self.request.GET.get('account')
+        month = self.request.GET.get('month')
+        year = self.request.GET.get('year')
 
         if category:
             queryset = queryset.filter(category=category)
         
         if account:
             queryset = queryset.filter(account=account)
+        
+        if month:
+            queryset = queryset.filter(
+                date__month = month,
+                date__year = year
+            )
+        
 
         queryset = queryset.filter(user=self.request.user.id)
         return queryset
@@ -107,13 +117,24 @@ class TransactionListView(LoginRequiredMixin, ListView):
         transactions = Transaction.objects.filter(user=self.request.user)
         categories = Category.objects.filter(user=self.request.user)
         accounts = Account.objects.filter(user=self.request.user)
+
+        current_date = timezone.now()
         months = transactions.values(
             "date__month",
-            "date__year"
         ).distinct().order_by(
             '-date__month'
         )
+        years = transactions.values(
+            "date__year",
+        ).distinct().order_by(
+            '-date__year'
+        )
 
+        for month in months:
+            month['month_name'] = calendar.month_name[month['date__month']]
+
+        context["current_date"] = current_date 
+        context["years"] = years 
         context["months"] = months 
         context["categories"] = categories
         context["accounts"] =accounts 
