@@ -1,7 +1,12 @@
 {% extends 'finances/base.html' %}
 {% load humanize %}
-
 {% block content %}
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="fw-bold mb-4 display-6">Budgets</h2>
+        <a href="{% url 'budget_create' %}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Add Item
+        </a>
+    </div>
     <div
         class="table-responsive"
     >
@@ -29,15 +34,15 @@
                     <td>Rp. {{ budget.limit|intcomma }}</td>
                     <td scope="row">{{ budget.category }}</td>
                     <td scope="row">{{ budget.type }}</td>
-                    {% comment %} <td>
-                        <a href="{% url 'account_detail' account.id %}">
+                    <td>
+                        <a href="{% url 'budget_detail' budget.id %}">
                             <button class="btn btn-warning">Detail</button>
-                        <a href="{% url 'account_update' account.id %}">
+                        <a href="{% url 'budget_update' budget.id %}">
                             <button class="btn btn-warning"> Edit </button>
-                        <a href="{% url 'account_delete' account.id %}">
+                        <a href="{% url 'budget_delete' budget.id %}">
                             <button class="btn btn-warning">Delete</button>
                         </a>
-                    </td> {% endcomment %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

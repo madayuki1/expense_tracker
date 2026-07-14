@@ -16,8 +16,6 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 
 # Create your views here.
-
-
 class BudgetListView(ListView):
     model = Budget
     template_name = "finances/budget_list"
@@ -26,6 +24,57 @@ class BudgetListView(ListView):
         queryset = super(BudgetListView, self).get_queryset()
         queryset = queryset.filter(user=self.request.user)
         return queryset
+
+class BudgetForm(forms.ModelForm):
+    """Form definition for Budget."""
+
+    class Meta:
+        """Meta definition for Budgetform."""
+
+        model = Budget 
+        fields = "__all__"
+        widgets = {
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "id": "name-id",
+                    "placeholder": "Budget Name",
+                }
+            ),
+            "category": forms.Select(attrs={"class": "form-select"}),
+            "type": forms.Select(attrs={"class": "form-select"}),
+            "limit": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "id": "amount-id",
+                    "placeholder": "Budget Limit",
+                }
+            ),
+        }
+
+class BudgetCreateView(CreateView):
+    model = Budget
+    template_name = "finances/budget_form.html"
+    form_class = BudgetForm
+    success_url = reverse_lazy('budget_list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class BudgetUpdateView(UpdateView):
+    model = Budget
+    template_name = "finances/budget_form.html"
+    form_class = BudgetForm
+    success_url = reverse_lazy('budget_list')
+    
+class BudgetDetailView(DetailView):
+    model = Budget
+    template_name = "finances/budget_detail.html"
+
+class BudgetDeleteView(DeleteView):
+    model = Budget
+    template_name = "finances/budget_delete.html"
 
 class AccountForm(forms.ModelForm):
     """Form definition for Account."""
@@ -62,11 +111,9 @@ class AccountListView(LoginRequiredMixin, ListView):
         queryset = queryset.filter(user=self.request.user.id)
         return queryset
 
-
 class AccountDetailView(LoginRequiredMixin, DetailView):
     model = Account
     template_name = "finances/account_detail.html"
-
 
 class AccountCreateView(LoginRequiredMixin, CreateView):
     model = Account
@@ -77,12 +124,9 @@ class AccountCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
-
-
 class AccountDeleteView(LoginRequiredMixin, DeleteView):
     model = Account
     success_url = reverse_lazy("account_list")
-
 
 class AccountUpdateView(LoginRequiredMixin, UpdateView):
     model = Account

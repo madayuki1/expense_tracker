@@ -1,0 +1,46 @@
+{% extends "finances/base.html" %}
+{% block content %}
+<div class="container">
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3 row">
+            <label
+                for="transaction-form-name"
+                class="col-4 col-form-label"
+                >Name</label
+            >
+            <div
+                class="col-8"
+            >
+            {{ form.name }}
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="" class="col 4 col-form-label form-label">Limit</label>
+            <div class="col-8">
+                {{ form.limit }}
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="" class="col 4 col-form-label form-label">Category</label>
+            <div class="col-8">
+                {{ form.category }}
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="" class="col 4 col-form-label form-label">Budget Types</label>
+            <div class="col-8">
+                {{ form.type }}
+            </div>
+        </div>
+         <div class="mb-3 row">
+            <div class="offset-sm-4 col-sm-8">
+                <button type="submit" class="btn btn-primary">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}
