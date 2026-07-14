@@ -67,6 +67,10 @@ class BudgetUpdateView(UpdateView):
     template_name = "finances/budget_form.html"
     form_class = BudgetForm
     success_url = reverse_lazy('budget_list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
     
 class BudgetDetailView(DetailView):
     model = Budget
@@ -74,7 +78,7 @@ class BudgetDetailView(DetailView):
 
 class BudgetDeleteView(DeleteView):
     model = Budget
-    template_name = "finances/budget_delete.html"
+    success_url = reverse_lazy('budget_list')
 
 class AccountForm(forms.ModelForm):
     """Form definition for Account."""
@@ -133,6 +137,10 @@ class AccountUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "finances/account_form.html"
     form_class = AccountForm
     success_url = reverse_lazy("account_list")
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class TransactionListView(LoginRequiredMixin, ListView):
@@ -215,6 +223,12 @@ class TransactionForm(forms.ModelForm):
             "account": forms.Select(attrs={"class": "form-select"}),
             "category": forms.Select(attrs={"class": "form-select"}),
             "type": forms.Select(attrs={"class": "form-select"}),
+            "date": forms.DateInput(
+                attrs={
+                    "type": "date",
+                    "class": "form-control",
+                    }
+                ),
             "amount": forms.NumberInput(
                 attrs={
                     "class": "form-control",
@@ -237,7 +251,6 @@ class TransactionForm(forms.ModelForm):
         if user is not None:
             self.fields["account"].queryset = Account.objects.filter(user=user)
             self.fields["category"].queryset = Category.objects.filter(user=user)
-
 
 class TransactionCreateView(LoginRequiredMixin, CreateView):
     model = Transaction
@@ -266,6 +279,15 @@ class TransactionUpdateView(LoginRequiredMixin, UpdateView):
     form_class = TransactionForm
     success_url = reverse_lazy("transaction_list")
 
+    def form_valid(self, form):
+        print('form valid')
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        response = super().form_invalid(form)
+        print(f'form invalid: {form.errors}, {form.non_field_errors()}')
+        return response
 
 class TransactionDeleteView(LoginRequiredMixin, DeleteView):
     model = Transaction
@@ -329,6 +351,10 @@ class CategoryUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "finances/category_form.html"
     form_class = CategoryForm
     success_url = reverse_lazy("category_list")
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class DashboardView(TemplateView):

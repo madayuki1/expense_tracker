@@ -93,7 +93,7 @@ class Budget(models.Model):
     class BudgetTypes(models.TextChoices):
         WEEKLY = "weekly", "Weekly"
         MONTHLY = "monthly", "Monthly"
-        YEARLY = "yearly", "Monthly"
+        YEARLY = "yearly", "Yearly"
 
     # TODO: Define fields here
     name = models.CharField("Budget Name", max_length=50)
