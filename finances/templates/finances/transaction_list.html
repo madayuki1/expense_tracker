@@ -1,7 +1,6 @@
 {% extends 'finances/base.html' %}
 {% load humanize %}
 {% block content %}
-{{ request.GET.account}}
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h2 class="fw-bold mb-4 display-6">Transactions</h2>
         <a href="{% url 'transaction_create' %}" class="btn btn-primary">

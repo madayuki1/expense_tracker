@@ -10,7 +10,7 @@ class Account(models.Model):
 
     # TODO: Define fields here
     name = models.CharField("Account Name", max_length=50)
-    balance = models.DecimalField("Account Balance", max_digits=10, decimal_places=2)
+    balance = models.DecimalField("Account Balance", max_digits=15, decimal_places=2)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField("Created At", auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField("Updated At", auto_now=False, auto_now_add=True)
@@ -77,7 +77,7 @@ class Transaction(models.Model):
         choices=TransactionTypes.choices,
         default=TransactionTypes.EXPENSE,
     )
-    amount = models.DecimalField("Transaction Amount", max_digits=9, decimal_places=2)
+    amount = models.DecimalField("Transaction Amount", max_digits=15, decimal_places=2)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField("Transaction Description", max_length=100)
     date = models.DateField("Transaction Date", default=timezone.localdate())
@@ -97,7 +97,7 @@ class Budget(models.Model):
 
     # TODO: Define fields here
     name = models.CharField("Budget Name", max_length=50)
-    limit = models.DecimalField("Budget Limit", max_digits=9, decimal_places=2)
+    limit = models.DecimalField("Budget Limit", max_digits=15, decimal_places=2)
     category = models.ForeignKey(
         "finances.Category", 
         verbose_name='Category ID', 
