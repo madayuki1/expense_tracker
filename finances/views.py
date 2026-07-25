@@ -162,6 +162,9 @@ class TransactionListView(LoginRequiredMixin, ListView):
         account = self.request.GET.get("account")
         month = self.request.GET.get("month")
         year = self.request.GET.get("year")
+        
+        if not month:
+            month = 7
 
         if category:
             queryset = queryset.filter(category=category)

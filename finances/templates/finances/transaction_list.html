@@ -64,7 +64,7 @@
                                         {% for month in months %}
                                             <option 
                                                 value="{{ month.date__month }}"
-                                                {% if current_date.month == month.date__month %}selected{% endif %}
+                                                {% if request.GET.month == month.date__month %}selected{% endif %}
                                             >{{month.month_name}}</option>
                                         {% endfor %}
                                     </select>
