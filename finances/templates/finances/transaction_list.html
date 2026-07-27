@@ -61,12 +61,21 @@
                                         onchange="this.form.submit()"
                                     >
                                         <option value="">All</option>
-                                        {% for month in months %}
-                                            <option 
-                                                value="{{ month.date__month }}"
-                                                {% if request.GET.month == month.date__month %}selected{% endif %}
-                                            >{{month.month_name}}</option>
-                                        {% endfor %}
+                                        {% if request.GET.month %}
+                                            {% for month in months %}
+                                                <option 
+                                                    value="{{ month.date__month }}"
+                                                    {% if request.GET.month == month.date__month %}selected{% endif %}
+                                                >{{month.month_name}}</option>
+                                            {% endfor %}
+                                        {% elif not request.GET.month %}
+                                            {% for month in months %}
+                                                <option 
+                                                    value="{{ month.date__month }}"
+                                                    {% if current_date.month == month.date__month %}selected{% endif %}
+                                                >{{month.month_name}}</option>
+                                            {% endfor %}
+                                        {% endif %}
                                     </select>
                                 </div>
                             </div>
