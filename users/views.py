@@ -16,7 +16,6 @@ class RegisterView(CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         response = super().form_valid(form)
-        
         user = self.object 
 
         messages.success(self.request, f"Register Success, Welcome {user.username}") 

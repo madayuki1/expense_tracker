@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect
 from .models import Account, Transaction, Category, Budget
 from django.views.generic import (
@@ -160,11 +161,14 @@ class TransactionListView(LoginRequiredMixin, ListView):
 
         category = self.request.GET.get("category")
         account = self.request.GET.get("account")
-        # month = self.request.GET.get("month")
-        month = (
-            self.request.GET.get("month")
-            or timezone.now().month
-        )
+        month = self.request.GET.get("month")
+        # month = (
+        #     self.request.GET.get("month")
+        #     or timezone.now().month
+        # )
+        if month is None: 
+            month = str(timezone.now().month)
+            
         year = self.request.GET.get("year")
 
         if category:
