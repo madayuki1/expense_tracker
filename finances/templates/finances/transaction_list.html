@@ -1,6 +1,7 @@
 {% extends 'finances/base.html' %}
 {% load humanize %}
 {% block content %}
+{{ current_date|date:"F"}}
     <div class="d-flex align-items-center justify-content-between mb-3">
         <h2 class="fw-bold mb-4 display-6">Transactions</h2>
         <a href="{% url 'transaction_create' %}" class="btn btn-primary">
@@ -61,21 +62,21 @@
                                         onchange="this.form.submit()"
                                     >
                                         <option value="">All</option>
-                                        {% comment %} {% if request.GET.month %} {% endcomment %}
+                                        {% if request.GET.month %}
                                             {% for month in months %}
                                                 <option 
                                                     value="{{ month.date__month }}"
                                                     {% if request.GET.month == month.date__month|stringformat:"s" %}selected{% endif %}
                                                 >{{month.month_name}}</option>
                                             {% endfor %}
-                                        {% comment %} {% elif not request.GET.month %}
+                                        {% elif not request.GET.month %}
                                             {% for month in months %}
                                                 <option 
                                                     value="{{ month.date__month }}"
                                                     {% if current_date.month == month.date__month %}selected{% endif %}
                                                 >{{month.month_name}}</option>
                                             {% endfor %}
-                                        {% endif %} {% endcomment %}
+                                        {% endif %}
                                     </select>
                                 </div>
                             </div>

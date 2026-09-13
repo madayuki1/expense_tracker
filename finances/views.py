@@ -162,14 +162,18 @@ class TransactionListView(LoginRequiredMixin, ListView):
         category = self.request.GET.get("category")
         account = self.request.GET.get("account")
         month = self.request.GET.get("month")
+        year = self.request.GET.get("year")
         # month = (
         #     self.request.GET.get("month")
         #     or timezone.now().month
         # )
         if month is None: 
             month = str(timezone.now().month)
-            
-        year = self.request.GET.get("year")
+        
+        if year is None:
+            year = str(timezone.now().year)
+
+        # year = self.request.GET.get("year")
 
         if category:
             queryset = queryset.filter(category=category)
