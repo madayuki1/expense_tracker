@@ -1,3 +1,4 @@
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -12,8 +13,8 @@ class Account(models.Model):
     name = models.CharField("Account Name", max_length=50)
     balance = models.DecimalField("Account Balance", max_digits=15, decimal_places=2)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    created_at = models.DateTimeField("Created At", auto_now=False, auto_now_add=True)
-    updated_at = models.DateTimeField("Updated At", auto_now=False, auto_now_add=True)
+    created_at = models.DateTimeField("Created At", auto_now_add=True)
+    updated_at = models.DateTimeField("Updated At", auto_now=True)
 
     class Meta:
         """Meta definition for Account."""
@@ -31,8 +32,8 @@ class Category(models.Model):
     # TODO: Define fields here
     name = models.CharField("Category Name", max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    created_at = models.DateTimeField("Created At", auto_now=False, auto_now_add=True)
-    updated_at = models.DateTimeField("Updated At", auto_now=False, auto_now_add=True)
+    created_at = models.DateTimeField("Created At", auto_now_add=True)
+    updated_at = models.DateTimeField("Updated At", auto_now=True)
 
     class Meta:
         """Meta definition for Category."""
@@ -81,8 +82,8 @@ class Transaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField("Transaction Description", max_length=100)
     date = models.DateField("Transaction Date", default=timezone.localdate())
-    created_at = models.DateTimeField("Created At", auto_now=False, auto_now_add=True)
-    updated_at = models.DateTimeField("Updated At", auto_now=False, auto_now_add=True)
+    created_at = models.DateTimeField("Created At", auto_now_add=True)
+    updated_at = models.DateTimeField("Updated At", auto_now=True)
 
     def __str__(self):
         """Unicode representation of Transaction."""
@@ -110,6 +111,8 @@ class Budget(models.Model):
         choices=BudgetTypes.choices,
         default=BudgetTypes.MONTHLY
         )
+    created_at = models.DateTimeField("Created At", auto_now_add=True)
+    updated_at = models.DateTimeField("Updated At", auto_now=True)
 
     class Meta:
         """Meta definition for Budget."""
