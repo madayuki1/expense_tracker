@@ -1,5 +1,6 @@
 
 from django.shortcuts import render, redirect
+from django.db import transaction as db_transaction
 from .models import Account, Transaction, Category, Budget
 from django.views.generic import (
     ListView,
@@ -219,7 +220,6 @@ class TransactionListView(LoginRequiredMixin, ListView):
         context["accounts"] = accounts
         return context
 
-
 class TransactionForm(forms.ModelForm):
     """Form definition for Transaction."""
 
@@ -283,7 +283,13 @@ class TransactionCreateView(LoginRequiredMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
+        transaction_obj = self.object
         form.instance.user = self.request.user
+        with db_transaction.atomic():
+            response = super().form_valid(form)
+
+
+            
         return super().form_valid(form)
 
 
