@@ -283,10 +283,14 @@ class TransactionCreateView(LoginRequiredMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
-        transaction_obj = self.object
         form.instance.user = self.request.user
         with db_transaction.atomic():
             response = super().form_valid(form)
+
+            transaction_obj = self.object
+            amount = transaction_obj.amount
+            print(f'amount: {amount}')
+
 
 
             
