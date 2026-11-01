@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, redirect
 from django.db import transaction as db_transaction
 from .models import Account, Transaction, Category, Budget
@@ -13,7 +12,7 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django import forms
 import calendar
-from django.db.models import Avg, Sum
+from django.db.models import Avg, Sum, F
 from django.urls import reverse_lazy
 from django.utils import timezone
 
@@ -287,12 +286,21 @@ class TransactionCreateView(LoginRequiredMixin, CreateView):
         with db_transaction.atomic():
             response = super().form_valid(form)
 
-            transaction_obj = self.object
+            transaction_obj: Transaction = self.object
             amount = transaction_obj.amount
-            print(f'amount: {amount}')
 
+            if transaction_obj.type == Transaction.TransactionTypes.INCOME:
+                delta = amount
+            elif transaction_obj.type == Transaction.TransactionTypes.EXPENSE:
+                delta = -amount
+            else:
+                delta = 0
 
-
+            Account.objects.filter(
+                pk = transaction_obj.account_id
+            ).update(
+                balance = F("balance") + delta
+            )
             
         return super().form_valid(form)
 
